@@ -1,12 +1,10 @@
 package com.example.chatgptjokes.entity;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
 import java.util.List;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class FoodOffer {
     private List<Clearance> clearances;
+    private Store store; // Tilføj butik til FoodOffer
 
     // Getters og setters
     public List<Clearance> getClearances() {
@@ -15,5 +13,13 @@ public class FoodOffer {
 
     public void setClearances(List<Clearance> clearances) {
         this.clearances = clearances;
+    }
+
+    public Store getStore() {
+        return store;
+    }
+
+    public void setStore(Store store) {
+        this.store = store;
     }
 }
