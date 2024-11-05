@@ -1,39 +1,56 @@
-// Load the food offers list on page load
 document.addEventListener("DOMContentLoaded", () => {
     const container = document.getElementById('offers-container');
 
-    fetch('/api/food-offers')
-        .then(response => response.json())
-        .then(data => {
-            console.log('Fetched Food Offers:', data);
-
-
-            data.forEach(obj => {
-                if (obj.clearances && Array.isArray(obj.clearances)) {
-                    obj.clearances.forEach(item => {
-                        const storeInfo = obj.store ? `
-                            <p>Store: ${obj.store.name}</p>
-                            <p>Address: ${obj.store.address.street}, ${obj.store.address.zip} ${obj.store.address.city}</p>
-                            <p>Brand: ${obj.store.brand}</p>
-                        ` : '<p>Store information not available</p>';
-
-                        const offerDiv = document.createElement('div');
-                        offerDiv.classList.add('offer-item');
-                        offerDiv.innerHTML = `
-                            <h3>${item.product.description}</h3>
-                            <p>Price: ${item.offer.newPrice} ${item.offer.currency}</p>
-                            <p>Discount: ${item.offer.percentDiscount}%</p>
-                            ${storeInfo}
-                            <img src="${item.product.image || 'images/placeholder.jpg'}" alt="${item.product.description}" class="img-thumbnail" />
-                        `;
-                        container.appendChild(offerDiv);
-                    });
-                } else {
-                    console.error('Clearances is not defined or not an array for this object:', obj);
+    // Funktion til at hente tilbud baseret på postnummer
+    const fetchFoodOffers = (zip) => {
+        fetch(`/api/food-offers?zip=${zip}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Fejl fra serveren: ${response.status}`);
                 }
-            });
-        })
-        .catch(error => console.error('Error fetching food offers:', error));
+                return response.json();
+            })
+            .then(data => {
+                console.log('Hentede fødevaretilbud:', data);
+                container.innerHTML = ''; // Ryd tidligere tilbud
+
+                data.forEach(obj => {
+                    if (obj.clearances && Array.isArray(obj.clearances)) {
+                        obj.clearances.forEach(item => {
+                            const storeInfo = obj.store ? `
+                                <p>Butik: ${obj.store.name}</p>
+                                <p>Adresse: ${obj.store.address.street}, ${obj.store.address.zip} ${obj.store.address.city}</p>
+                                <p>Mærke: ${obj.store.brand}</p>
+                            ` : '<p>Butiksinformation ikke tilgængelig</p>';
+
+                            const offerDiv = document.createElement('div');
+                            offerDiv.classList.add('offer-item');
+                            offerDiv.innerHTML = `
+                                <h3>${item.product.description}</h3>
+                                <p>Pris: ${item.offer.newPrice} ${item.offer.currency}</p>
+                                <p>Rabat: ${item.offer.percentDiscount}%</p>
+                                ${storeInfo}
+                                <img src="${item.product.image || 'images/placeholder.jpg'}" alt="${item.product.description}" class="img-thumbnail" />
+                            `;
+                            container.appendChild(offerDiv);
+                        });
+                    } else {
+                        console.error('Clearances er ikke defineret eller ikke en liste for dette objekt:', obj);
+                    }
+                });
+            })
+            .catch(error => console.error('Fejl ved hentning af fødevaretilbud:', error));
+    };
+
+    // Event listener for "Find Tilbud" knappen
+    document.getElementById("btn-get-offers").addEventListener("click", () => {
+        const zip = document.getElementById("postalCode").value.trim();
+        if (zip) {
+            fetchFoodOffers(zip); // Kald funktionen med brugerindtastet postnummer
+        } else {
+            alert("Indtast venligst et postnummer.");
+        }
+    });
 });
 
 // Fetch the recipe on button click without affecting the food offers
