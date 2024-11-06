@@ -28,7 +28,7 @@ public class FoodOfferService {
         this.restTemplate = restTemplate;
     }
 
-    public List<FoodOffer> getAllFoodOffers() {
+    public List<FoodOffer> getFoodOffersByZip(String zip) {
         // Opret headers og tilføj Authorization-token
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", "Bearer " + apiAuthToken);
@@ -37,7 +37,7 @@ public class FoodOfferService {
 
         // Lav REST-kaldet og håndter svaret
         ResponseEntity<FoodOffer[]> response = restTemplate.exchange(
-                apiBaseUrl + "?zip=2300",
+                apiBaseUrl + "?zip=" + zip,
                 HttpMethod.GET,
                 entity,
                 FoodOffer[].class
