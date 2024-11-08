@@ -7,3 +7,27 @@
 label {
     font-weight: bold;
 }
+/* Indstil containeren som en Flexbox */
+.container {
+    display: flex;
+    gap: 20px; /* Afstand mellem de to sektioner */
+}
+
+/* Fødevaretilbud sektionen */
+.col-md-8 {
+    flex: 1; /* Fylder så meget plads, den kan få */
+}
+
+/* Recipe Assistant sektionen */
+.fixed-sidebar {
+    flex: 0 0 300px; /* Fast bredde på 300px */
+    position: sticky;
+    top: 20px;
+}
+
+body {
+    background-color: #e9ecef;
+}
+
+
+

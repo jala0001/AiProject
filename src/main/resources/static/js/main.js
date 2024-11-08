@@ -24,13 +24,17 @@ document.addEventListener("DOMContentLoaded", () => {
                             ` : '<p>Butiksinformation ikke tilgængelig</p>';
 
                             const offerDiv = document.createElement('div');
-                            offerDiv.classList.add('offer-item');
+                            offerDiv.className = 'col-md-6 col-lg-4';
                             offerDiv.innerHTML = `
-                                <h3>${item.product.description}</h3>
-                                <p>Pris: ${item.offer.newPrice} ${item.offer.currency}</p>
-                                <p>Rabat: ${item.offer.percentDiscount}%</p>
-                                ${storeInfo}
-                                <img src="${item.product.image || 'images/placeholder.jpg'}" alt="${item.product.description}" class="img-thumbnail" />
+                                <div class="card h-100">
+                                    <img src="${item.product.image || 'images/placeholder.jpg'}" class="card-img-top img-fluid" alt="${item.product.description}">
+                                    <div class="card-body">
+                                        <h5 class="card-title">${item.product.description}</h5>
+                                        <p class="card-text">Pris: ${item.offer.newPrice} ${item.offer.currency}</p>
+                                        <p class="card-text">Rabat: ${item.offer.percentDiscount}%</p>
+                                        ${storeInfo}
+                                    </div>
+                                </div>
                             `;
                             container.appendChild(offerDiv);
                         });
@@ -72,10 +76,9 @@ document.getElementById("btn-get-recipe").addEventListener("click", async functi
         const response = await fetch(`http://localhost:8080/api/v1/joke?about=${encodeURIComponent(topic)}`);
         const data = await response.json();
 
-        console.log("Recipe Response Data:", data); // Debugging: Check response structure
+        console.log("Recipe Response Data:", data);
 
         if (response.ok) {
-            // Display the recipe answer with formatting for line breaks
             result.innerHTML = data.answer.replace(/\n/g, "<br>") || "No recipe found for the given topic.";
         } else {
             result.textContent = "Error fetching recipe. Please try again.";
@@ -84,7 +87,6 @@ document.getElementById("btn-get-recipe").addEventListener("click", async functi
         console.error("Error fetching recipe:", error);
         result.textContent = "Error fetching recipe. Please try again.";
     } finally {
-        // Hide the spinner after request is complete
         spinner.style.display = "none";
     }
 });
