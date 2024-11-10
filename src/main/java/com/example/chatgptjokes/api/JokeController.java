@@ -17,9 +17,9 @@ public class JokeController {
   /**
    * This contains the message to the ChatGPT API, telling the AI how it should act in regard to the requests it gets.
    */
-  final static String SYSTEM_MESSAGE = "You are a helpful cooking assistant that only provides cooking recipes, in danish."+
-          " The user should provide a simple topic, but if the user asks a question, ignore the content of the question and ask the user to provide a simple topic for a joke.";
-
+  final static String SYSTEM_MESSAGE = "Du er en hjælpsom madlavningsassistent, der kun leverer opskrifter på dansk. " +
+          "Når brugeren angiver en ingrediens eller et produkt, skal du oprette en opskrift, " +
+          "der bruger denne ingrediens som en del af retten, fremfor at lave produktet fra bunden.";
   /**
    * The controller called from the browser client.
    * @param service
